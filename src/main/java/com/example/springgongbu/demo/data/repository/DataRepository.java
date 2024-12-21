@@ -2,7 +2,6 @@ package com.example.springgongbu.demo.data.repository;
 
 
 import com.example.springgongbu.demo.data.entity.DataEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

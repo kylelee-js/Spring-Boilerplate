@@ -52,6 +52,11 @@ task runPostgresDockerContainer(type: Exec) {
     commandLine 'docker', 'run', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '-d', 'my-postgres-image'
 }
 
+task startPostgresDockerContainer(type: Exec) {
+    description = 'Start the PostgreSQL Docker container'
+    commandLine 'docker', 'start', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '-d', 'my-postgres-image'
+}
+
 task stopPostgresDockerContainer(type: Exec) {
     description = 'Stops the PostgreSQL Docker container'
     commandLine 'docker', 'stop', 'my-postgres-container'

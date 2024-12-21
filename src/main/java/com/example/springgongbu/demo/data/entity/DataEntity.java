@@ -15,7 +15,7 @@ public class DataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String age;
+    private int age;
     private String email;
     private String address;
     private String phoneNumber;

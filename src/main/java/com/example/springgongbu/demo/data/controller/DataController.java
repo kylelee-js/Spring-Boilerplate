@@ -1,13 +1,12 @@
 package com.example.springgongbu.demo.data.controller;
 
+import com.example.springgongbu.demo.data.dto.DataDto;
 import com.example.springgongbu.demo.data.entity.DataEntity;
 import com.example.springgongbu.demo.data.service.DataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,28 +19,16 @@ public class DataController {
     @Autowired
     private DataService dataService;
 
-    @GetMapping("/home")
-    public String home() {
-        logger.info("DataController.home() called.");
-        return "home";
+    @PostMapping("/create")
+    public String create(@RequestBody DataDto dto) {
+        logger.info("DataController.created() called.");
+        String text = dataService.create(dto);
+        return text;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        logger.info("DataController.test() called.");
-        return "test";
-    }
-
-    @GetMapping("/test2")
-    public String test2() {
-        logger.info("DataController.test2() called.");
-        dataService.test();
-        return "test2";
-    }
-
-    @GetMapping("/getData")
-    public List<DataEntity> getData() {
-        logger.info("DataController.getData() called.");
-        return dataService.getData();
+    @GetMapping("/getAll")
+    public List<DataEntity> getAll() {
+        logger.info("DataController.getAll() called.");
+        return dataService.getAll();
     }
 }
