@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.4.0'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.example.springgongbu'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.github.docker-java:docker-java:3.4.1'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task buildDockerImage(type: Exec) {
+    description = 'Builds the Docker image for PostgreSQL'
+    commandLine 'docker', 'build', '-t', 'my-postgres-image', './db'
+}
+
+task runPostgresDockerContainer(type: Exec) {
+    description = 'Runs the PostgreSQL Docker container'
+    commandLine 'docker', 'run', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '-d', 'my-postgres-image'
+}
+
+task stopPostgresDockerContainer(type: Exec) {
+    description = 'Stops the PostgreSQL Docker container'
+    commandLine 'docker', 'stop', 'my-postgres-container'
+}
+
+task removePostgresDockerContainer(type: Exec) {
+    description = 'Removes the PostgreSQL Docker container'
+    commandLine 'docker', 'rm', 'my-postgres'
+}
