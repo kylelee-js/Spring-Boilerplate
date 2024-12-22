@@ -20,7 +20,7 @@ public class DataService {
 
     @Transactional
     public String create(DataDto dto) {
-        log.debug("DataService.create() called : {}", dto);
+        log.debug("DataService.create() called : {}", dto.toString());
         Random random = new Random();
         DataEntity dataEntity = new DataEntity();
         dataEntity.setName(dto.getName());
