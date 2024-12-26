@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 데이터베이스 서비스
+  db:
+    image: postgres:13
+    container_name: spring_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: demo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - spring_network
+
+  # Spring Boot 애플리케이션 서비스
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/demo_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - spring_network
+
+volumes:
+  db_data:
+
+networks:
+  spring_network:
+    driver: bridge

@@ -43,19 +43,41 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// Docker tasks
+task setDockerNetwork(type: Exec) {
+    description = 'Sets up the Docker network'
+    commandLine 'docker', 'network', 'create', 'spring-gongbu-network'
+}
+
 task buildDockerImage(type: Exec) {
+    description = 'Builds the Docker image'
+    commandLine 'docker', 'build', '-t', 'spring-gongbu', '.'
+}
+
+task runDockerContainer(type: Exec) {
+    description = 'Runs the Docker container'
+    commandLine 'docker', 'run', '--name', 'spring-gongbu-container', '-p', '8080:8080', '--network', 'spring-gongbu-network', '-d', 'spring-gongbu'
+}
+
+task startDockerContainer(type: Exec) {
+    description = 'Start the Docker container'
+    commandLine 'docker', 'start', 'spring-gongbu-container'
+}
+
+// PostgreSQL Docker container tasks
+task buildPostgresImage(type: Exec) {
     description = 'Builds the Docker image for PostgreSQL'
     commandLine 'docker', 'build', '-t', 'my-postgres-image', './db'
 }
 
 task runPostgresDockerContainer(type: Exec) {
     description = 'Runs the PostgreSQL Docker container'
-    commandLine 'docker', 'run', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '-d', 'my-postgres-image'
+    commandLine 'docker', 'run', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '--network', 'spring-gongbu-network', '-d', 'my-postgres-image'
 }
 
 task startPostgresDockerContainer(type: Exec) {
     description = 'Start the PostgreSQL Docker container'
-    commandLine 'docker', 'start', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '-d', 'my-postgres-image'
+    commandLine 'docker', 'start', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '--network', 'spring-gongbu-network', '-d', 'my-postgres-image'
 }
 
 task stopPostgresDockerContainer(type: Exec) {
