@@ -9,3 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface DataRepository extends JpaRepository<DataEntity, Long> {
     // TODO: Implement DataRepository
 }
+

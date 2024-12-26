@@ -3,20 +3,23 @@ package com.example.springgongbu.demo.data.service;
 import com.example.springgongbu.demo.data.dto.DataDto;
 import com.example.springgongbu.demo.data.entity.DataEntity;
 import com.example.springgongbu.demo.data.repository.DataRepository;
+import java.util.List;
+import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Random;
-
 @Service
 @Slf4j
 public class DataService {
 
+    private final DataRepository dataRepository;
+
     @Autowired
-    private DataRepository dataRepository;
+    public DataService(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
 
     @Transactional
     public String create(DataDto dto) {
@@ -29,7 +32,6 @@ public class DataService {
         dataEntity.setAddress("address");
         dataEntity.setPhoneNumber("phoneNumber");
         dataRepository.save(dataEntity);
-
         return "created";
     }
 

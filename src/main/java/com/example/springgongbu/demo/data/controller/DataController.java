@@ -4,11 +4,14 @@ import com.example.springgongbu.demo.data.dto.DataDto;
 import com.example.springgongbu.demo.data.entity.DataEntity;
 import com.example.springgongbu.demo.data.service.DataService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -16,8 +19,12 @@ import java.util.List;
 @Slf4j
 public class DataController {
 
+    private final DataService dataService;
+
     @Autowired
-    private DataService dataService;
+    public DataController(DataService dataService) {
+        this.dataService = dataService;
+    }
 
     @PostMapping("/create")
     public String create(@RequestBody @Valid DataDto dto) {

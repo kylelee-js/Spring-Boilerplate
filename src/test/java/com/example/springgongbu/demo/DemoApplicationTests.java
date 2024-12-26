@@ -1,8 +1,12 @@
 package com.example.springgongbu.demo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.example.springgongbu.demo.data.entity.DataEntity;
 import com.example.springgongbu.demo.data.repository.DataRepository;
 import com.example.springgongbu.demo.data.service.DataService;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,22 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 
 @SpringBootTest
 class DemoApplicationTests {
 
     private static final Logger log = LoggerFactory.getLogger(DemoApplicationTests.class);
-    @Autowired
-    private DataService dataService;
-
+    private final DataService dataService;
     @MockitoBean
     private DataRepository dataRepository;
 
+    @Autowired
+    public DemoApplicationTests(DataService dataService) {
+        this.dataService = dataService;
+    }
 
     @Test
     void testService() {
