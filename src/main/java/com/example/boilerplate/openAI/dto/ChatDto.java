@@ -1,4 +1,4 @@
-package com.example.springgongbu.demo.openAI;
+package com.example.boilerplate.openAI.dto;
 
 import java.util.List;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.springgongbu.demo.data.entity;
+package com.example.boilerplate.data.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

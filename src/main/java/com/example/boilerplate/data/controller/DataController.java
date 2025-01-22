@@ -1,8 +1,8 @@
-package com.example.springgongbu.demo.data.controller;
+package com.example.boilerplate.data.controller;
 
-import com.example.springgongbu.demo.data.dto.DataDto;
-import com.example.springgongbu.demo.data.entity.DataEntity;
-import com.example.springgongbu.demo.data.service.DataService;
+import com.example.boilerplate.data.dto.DataDto;
+import com.example.boilerplate.data.entity.DataEntity;
+import com.example.boilerplate.data.service.DataService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

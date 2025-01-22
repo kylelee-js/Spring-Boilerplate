@@ -1,5 +1,6 @@
-package com.example.springgongbu.demo.openAI;
+package com.example.boilerplate.openAI.service;
 
+import com.example.boilerplate.openAI.dto.ChatDto;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.util.List;
 import java.util.Map;

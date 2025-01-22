@@ -1,5 +1,6 @@
-package com.example.springgongbu.demo.openAI;
+package com.example.boilerplate.openAI.controller;
 
+import com.example.boilerplate.openAI.service.GptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.example.springgongbu.demo.config;
+package com.example.boilerplate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

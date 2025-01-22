@@ -1,4 +1,4 @@
-package com.example.springgongbu.demo.config;
+package com.example.boilerplate.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;

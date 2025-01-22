@@ -1,4 +1,4 @@
-package com.example.springgongbu.demo.data.dto;
+package com.example.boilerplate.data.dto;
 
 
 import jakarta.validation.constraints.Email;

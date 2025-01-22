@@ -1,11 +1,11 @@
-package com.example.springgongbu.demo;
+package com.example.boilerplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.example.springgongbu.demo.data.entity.DataEntity;
-import com.example.springgongbu.demo.data.repository.DataRepository;
-import com.example.springgongbu.demo.data.service.DataService;
+import com.example.boilerplate.data.entity.DataEntity;
+import com.example.boilerplate.data.repository.DataRepository;
+import com.example.boilerplate.data.service.DataService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -16,15 +16,15 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 
 @SpringBootTest
-class DemoApplicationTests {
+class BoilerplateApplicationTests {
 
-    private static final Logger log = LoggerFactory.getLogger(DemoApplicationTests.class);
+    private static final Logger log = LoggerFactory.getLogger(BoilerplateApplicationTests.class);
     private final DataService dataService;
     @MockitoBean
     private DataRepository dataRepository;
 
     @Autowired
-    public DemoApplicationTests(DataService dataService) {
+    BoilerplateApplicationTests(DataService dataService) {
         this.dataService = dataService;
     }
 

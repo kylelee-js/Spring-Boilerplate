@@ -1,8 +1,8 @@
-package com.example.springgongbu.demo.data.service;
+package com.example.boilerplate.data.service;
 
-import com.example.springgongbu.demo.data.dto.DataDto;
-import com.example.springgongbu.demo.data.entity.DataEntity;
-import com.example.springgongbu.demo.data.repository.DataRepository;
+import com.example.boilerplate.data.dto.DataDto;
+import com.example.boilerplate.data.entity.DataEntity;
+import com.example.boilerplate.data.repository.DataRepository;
 import java.util.List;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;

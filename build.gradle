@@ -1,11 +1,10 @@
 plugins {
     id 'java'
-    id 'war'
     id 'org.springframework.boot' version '3.4.0'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.example.springgongbu'
+group = 'com.example.boilerplate'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -34,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -44,49 +42,51 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// Docker tasks
+// Docker Network tasks
 task setDockerNetwork(type: Exec) {
     description = 'Sets up the Docker network'
-    commandLine 'docker', 'network', 'create', 'spring-gongbu-network'
-}
-
-task buildDockerImage(type: Exec) {
-    description = 'Builds the Docker image'
-    commandLine 'docker', 'build', '-t', 'spring-gongbu', '.'
-}
-
-task runDockerContainer(type: Exec) {
-    description = 'Runs the Docker container'
-    commandLine 'docker', 'run', '--name', 'spring-gongbu-container', '-p', '8080:8080', '--network', 'spring-gongbu-network', '-d', 'spring-gongbu'
-}
-
-task startDockerContainer(type: Exec) {
-    description = 'Start the Docker container'
-    commandLine 'docker', 'start', 'spring-gongbu-container'
+    commandLine 'docker', 'network', 'create', 'spring-network'
 }
 
 // PostgreSQL Docker container tasks
 task buildPostgresImage(type: Exec) {
     description = 'Builds the Docker image for PostgreSQL'
-    commandLine 'docker', 'build', '-t', 'my-postgres-image', './db'
+    commandLine 'docker', 'build', '-t', 'postgres-image', './db'
 }
 
 task runPostgresDockerContainer(type: Exec) {
     description = 'Runs the PostgreSQL Docker container'
-    commandLine 'docker', 'run', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '--network', 'spring-gongbu-network', '-d', 'my-postgres-image'
+    commandLine 'docker', 'run', '--name', 'postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=boilerplate', '-p', '5432:5432', '--network', 'spring-network', '-d', 'postgres-image'
 }
 
 task startPostgresDockerContainer(type: Exec) {
     description = 'Start the PostgreSQL Docker container'
-    commandLine 'docker', 'start', '--name', 'my-postgres-container', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=employee', '-p', '5432:5432', '--network', 'spring-gongbu-network', '-d', 'my-postgres-image'
+    commandLine 'docker', 'start', 'postgres-container'
 }
 
 task stopPostgresDockerContainer(type: Exec) {
     description = 'Stops the PostgreSQL Docker container'
-    commandLine 'docker', 'stop', 'my-postgres-container'
+    commandLine 'docker', 'stop', 'postgres-container'
 }
 
 task removePostgresDockerContainer(type: Exec) {
     description = 'Removes the PostgreSQL Docker container'
-    commandLine 'docker', 'rm', 'my-postgres'
+    commandLine 'docker', 'rm', 'postgres-container'
+}
+
+
+// Spring Boot application Docker container tasks
+task buildDockerImage(type: Exec) {
+    description = 'Builds the Docker image'
+    commandLine 'docker', 'build', '-t', 'spring-boilerplate-image', '.'
+}
+
+task runDockerContainer(type: Exec) {
+    description = 'Runs the Docker container'
+    commandLine 'docker', 'run', '--name', 'spring-boilerplate-container', '-p', '8080:8080', '--network', 'spring-network', '-e', 'SPRING_PROFILES_ACTIVE=docker', '-d', 'spring-boilerplate-image'
+}
+
+task startDockerContainer(type: Exec) {
+    description = 'Start the Docker container'
+    commandLine 'docker', 'start', 'spring-boilerplate-container'
 }

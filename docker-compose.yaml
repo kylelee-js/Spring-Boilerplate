@@ -2,40 +2,48 @@ version: '3.8'
 
 services:
   # PostgreSQL 데이터베이스 서비스
-  db:
-    image: postgres:13
-    container_name: spring_db
+  postgres:
+    image: postgres-image # 이미지 이름 접두사 제외
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: postgres-container
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: demo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: boilerplate
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
-      - spring_network
+      - spring-network
 
+  ### TODO: 아직 도커 네트워크 문제가 있어 컴포즈 기능은 사용이 어려움
   # Spring Boot 애플리케이션 서비스
-  spring-app:
+  server:
+    image: spring-boilerplate-image # 이미지 이름 접두사 제외
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring_app
+    container_name: spring-boilerplate-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/demo_db
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: boilerplate
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      - postgres
     networks:
-      - spring_network
+      - spring-network
 
 volumes:
   db_data:
 
 networks:
-  spring_network:
+  spring-network:
+    name: spring-network # 네트워크 이름 접두사 제외
     driver: bridge
+    external: true # 직접 네트워크를 생성했을 경우 true, 아니면 false
