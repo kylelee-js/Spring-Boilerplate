@@ -1,9 +1,14 @@
 package com.example.boilerplate.openAI.controller;
 
+import com.example.boilerplate.openAI.dto.ScriptToJsonDto;
 import com.example.boilerplate.openAI.service.GptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class GptController {
@@ -15,15 +20,55 @@ public class GptController {
         this.gptService = gptService;
     }
 
-    @GetMapping("/gpt/test/chat")
-    public String getTestChat() {
-        String testPrompt = "김치찌개 만드는 방법";
-        return gptService.getChat(testPrompt);
+    @GetMapping("/gpt/script-form")
+    public String getScriptForm() {
+        return """
+            <!DOCTYPE html>
+            <html lang="ko">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Script to JSON</title>
+                <script>
+                    function sendScript() {
+                        const scriptText = document.getElementById("script").value;
+
+                        fetch("/gpt/script-to-json", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ script: scriptText })
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById("result").textContent = data;
+                        })
+                        .catch(error => console.error("Error:", error));
+                    }
+                </script>
+            </head>
+            <body>
+                <h2>Script to JSON 변환</h2>
+                <textarea id="script" rows="10" cols="50" placeholder="여기에 스크립트를 입력하세요"></textarea>
+                <br>
+                <button onclick="sendScript()">전송</button>
+                <h3>결과:</h3>
+                <pre id="result"></pre>
+            </body>
+            </html>
+            """;
     }
 
-    @GetMapping("/gpt/test/chat2")
-    public String getTestChat2() {
-        String testPrompt = "김치찌개 만드는 방법";
-        return gptService.getChat2(testPrompt);
+    @PostMapping("/gpt/script-to-json")
+    public String getScriptToJson(@RequestBody ScriptToJsonDto body) {
+        String script = body.getScript();
+        return gptService.getScriptToJson(script);
+    }
+
+    @PostMapping("/gpt/chat")
+    public String getTestChat(@RequestBody Map<String, String> body) {
+        String prompt = body.get("prompt");
+        return gptService.getChat(prompt);
     }
 }
