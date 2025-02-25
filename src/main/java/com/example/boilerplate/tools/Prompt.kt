@@ -2,6 +2,50 @@ package com.example.boilerplate.tools
 
 import com.example.boilerplate.openAI.dto.ChatRequestDto
 
+enum class Emotion(val value: String) {
+    DEFAULT("""
+              "rotate_pitch": 0,
+              "rotate_yaw": 0,
+              "rotate_roll": 0,
+              "blink": 0,
+              "eyebrow": 0,
+              "wink": 0,
+              "pupil_x": 0,
+              "pupil_y": 0,
+              "aaa": 0,
+              "eee": 0,
+              "woo": 0,
+              "smile": 0,
+    """.trimIndent()),
+    HAPPY("""
+              "rotate_pitch": 0,
+              "rotate_yaw": 0.6,
+              "rotate_roll": 0,
+              "blink": 0,
+              "eyebrow": 0,
+              "wink": 14.2,
+              "pupil_x": 0,
+              "pupil_y": 0,
+              "aaa": 0,
+              "eee": 0,
+              "woo": 0,
+              "smile": 1.3,
+    """.trimIndent()),
+    SAD("""
+              "rotate_pitch": 0,
+              "rotate_yaw": 0,
+              "rotate_roll": 0,
+              "blink": 0,
+              "eyebrow": -10,
+              "wink": 0,
+              "pupil_x": -15,
+              "pupil_y": -15,
+              "aaa": -8,
+              "eee": 3.5,
+              "woo": 14.2,
+              "smile": -0.3,
+    """.trimIndent()),
+}
 
 class Prompt {
     companion object {
@@ -40,6 +84,55 @@ class Prompt {
   ]
 }
             """)
+        }
+
+        fun experssion(emotion: Emotion, imageUrl: String, outputUrl: String): String{
+            val propmt = """
+            {
+  "14": {
+    "inputs": {
+      ${emotion.value}
+      "src_ratio": 1,
+      "sample_ratio": 1,
+      "sample_parts": "OnlyExpression",
+      "crop_factor": 1.5,
+      "src_image": [
+        "15",
+        0
+      ]
+    },
+    "class_type": "ExpressionEditor",
+    "_meta": {
+      "title": "Expression Editor (PHM)"
+    }
+  },
+  "15": {
+    "inputs": {
+      "image": "$imageUrl",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "33": {
+    "inputs": {
+      "filename_prefix": "ExpressionEditing",
+      "images": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  }
+}
+            """
+
+            return propmt
         }
     }
 }
