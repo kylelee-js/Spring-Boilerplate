@@ -81,7 +81,7 @@ public class ImageController {
             </div>
 
             <div class="download-btn" id="downloadContainer">
-                <a id="downloadLink" href="#" onclick="imgDownload(event, this.src, 'download.png')">이미지 다운로드</a>
+                <a id="downloadLink" href="#" onclick="downloadImage(event, this.href)">이미지 다운로드</a>
             </div>
 
             <script>
@@ -126,18 +126,22 @@ public class ImageController {
                         alert("이미지 변환 중 오류 발생: " + error.message);
                     }
                 });
-                function imgDownload(event, imageURL, fileName) {
-                    event.preventDefault();
-                    var img = new Image();
-                    	img.crossOrigin = "Anonymous";
-                        img.id = "getshot";
-                        img.src = imageURL;
-                        document.body.appendChild(img);
-                    var a = document.createElement("a");
-                        a.href = getshot.src;
-                        a.download = fileName;
-                        a.click();
-                        document.body.removeChild(img);
+                async function downloadImage(event, imageSrc) {
+                  event.preventDefault();
+                    
+                  console.log(imageSrc)
+                  const image = await fetch(imageSrc)
+                  const imageBlog = await image.blob()
+                  const imageURL = URL.createObjectURL(imageBlog)
+                  
+                  console.log(imageURL)
+                
+                  const link = document.createElement('a')
+                  link.href = imageURL
+                  link.download = 'image.png'
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
                 }
             </script>
 
