@@ -24,7 +24,8 @@ public class GptService {
                 List.of(
                         Prompt.Companion.scriptToJson(),
                         new ChatRequestDto.MessageDto("user", script)
-                )
+                ),
+                null
         );
 
         return openAiRestClient.getChat(requestDto);
@@ -37,7 +38,24 @@ public class GptService {
                 List.of(
                         new ChatRequestDto.MessageDto("system", "You are a helpful assistant."),
                         new ChatRequestDto.MessageDto("user", prompt)
-                )
+                ),
+                null
+        );
+
+        log.info("Generated ChatRequestDto: {}", requestDto);
+
+        return openAiRestClient.getChat(requestDto);
+    }
+
+    public String functionCalling(String prompt) {
+        log.info("functionCalling called with prompt: {}", prompt);
+        ChatRequestDto requestDto = new ChatRequestDto(
+                "gpt-4o-mini",
+                List.of(
+                        new ChatRequestDto.MessageDto("system", "You are a helpful assistant."),
+                        new ChatRequestDto.MessageDto("user", prompt)
+                ),
+                null
         );
 
         log.info("Generated ChatRequestDto: {}", requestDto);

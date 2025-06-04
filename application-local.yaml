@@ -1,7 +1,0 @@
-spring:
-  # database configuration - postgresql
-  datasource:
-    url: jdbc:postgresql://localhost:5432/boilerplate
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver

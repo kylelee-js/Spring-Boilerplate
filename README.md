@@ -24,6 +24,12 @@ docker run --name postgres-container -p 5432:5432 -e {DB 설정} --network sprin
 ```
 
 
+## docker-compose 
+```
+$ docker-compose up --build -d
+```
+
+
 ## 빌드
 ```shell
 ./gradlew build

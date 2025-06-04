@@ -1,13 +1,13 @@
 # Spring Boot application properties
 spring:
   profiles:
-    active: docker
+    active: local
   # environment variables
   config:
     import: optional:file:.env[.properties]
   # database configuration - postgresql
   datasource:
-    url: jdbc:postgresql://postgres-container:5432/employee
+    url: jdbc:postgresql://localhost:5432/boilerplate
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -23,3 +23,9 @@ logging:
   level:
     org:
       springframework: trace
+
+servlet:
+  multipart:
+    enabled: true
+    max-file-size: 30MB
+    max-request-size: 30MB

@@ -1,3 +1,31 @@
+# Spring Boot application properties
 spring:
-  application:
-    name: boilerplate
+  profiles:
+    active: local
+  # environment variables
+  config:
+    import: optional:file:.env[.properties]
+  # database configuration - postgresql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/boilerplate
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org:
+      springframework: trace
+
+servlet:
+  multipart:
+    enabled: true
+    max-file-size: 30MB
+    max-request-size: 30MB

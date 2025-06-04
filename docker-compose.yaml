@@ -46,4 +46,4 @@ networks:
   spring-network:
     name: spring-network # 네트워크 이름 접두사 제외
     driver: bridge
-    external: true # 직접 네트워크를 생성했을 경우 true, 아니면 false
+#    external: true # 직접 네트워크를 생성했을 경우 true, 아니면 false
