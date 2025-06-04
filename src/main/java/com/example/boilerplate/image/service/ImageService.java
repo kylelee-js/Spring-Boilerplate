@@ -24,9 +24,7 @@ public class ImageService {
     public String uploadImage(MultipartFile imageFile) {
         log.info("ImageService.uploadImage() called.");
 
-        UploadDto response = comfyUiRestClient.uploadImage(imageFile);
-        String url = response.getName();
-        return url;
+        return comfyUiRestClient.uploadImage(imageFile).getName();
     }
 
 
@@ -37,26 +35,16 @@ public class ImageService {
 
         String outputUrl = "exp_" + imageUrl;
 
-        Emotion emotionEnum;
-
-        switch (emotion) {
-            case "happy":
-                emotionEnum = Emotion.HAPPY;
-                break;
-            case "sad":
-                emotionEnum = Emotion.SAD;
-                break;
-            default:
-                emotionEnum = Emotion.DEFAULT;
-                break;
-        }
+        Emotion emotionEnum = switch (emotion) {
+            case "happy" -> Emotion.HAPPY;
+            case "sad" -> Emotion.SAD;
+            default -> Emotion.DEFAULT;
+        };
 
         String prompt = Prompt.Companion.experssion(emotionEnum, imageUrl, outputUrl);
 
         String clientId = UUID.randomUUID().toString();
 
-        return comfyUiRestClient.expression(prompt, clientId).thenApply(imageData ->
-             "http://localhost:8188/view?filename=" + imageData
-        );
+        return comfyUiRestClient.expression(prompt, clientId);
     }
 }

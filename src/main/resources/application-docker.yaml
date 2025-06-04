@@ -17,6 +17,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+comfyui:
+  base-url: http://localhost:8000
+
 logging:
   level:
     org:

@@ -1,9 +1,9 @@
 package com.example.boilerplate.image.client;
 
 import com.example.boilerplate.image.dto.UploadDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -21,12 +21,16 @@ import java.util.concurrent.CompletableFuture;
 public class ComfyUiRestClientImpl implements ComfyUiRestClient {
 
     private final RestClient restClient;
+
+    @Value("${comfyui.base-url}")
+    private String comfyUiBaseUrl;
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public ComfyUiRestClientImpl() {
-        log.info("ComfyUiRestClientImpl created.");
+        log.info("ComfyUiRestClientImpl created with baseUrl: {}", comfyUiBaseUrl);
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:8188")
+                .baseUrl(comfyUiBaseUrl)
                 .build();
     }
 
@@ -40,13 +44,11 @@ public class ComfyUiRestClientImpl implements ComfyUiRestClient {
                 }
             });
 
-            UploadDto response = restClient.post()
+            return restClient.post()
                     .uri("/upload/image")
                     .body(body)
                     .retrieve()
                     .body(UploadDto.class);
-            return response;
-
         } catch (IOException e) {
             log.error("Error uploading image: {}", e.getMessage());
             return null;
@@ -84,26 +86,17 @@ public class ComfyUiRestClientImpl implements ComfyUiRestClient {
                         .body(String.class);
                 log.info("Output: {}", output);
 
-                try {
-                    JsonNode rootNode = objectMapper.readTree(output);
-                    JsonNode historyNode = rootNode.get(promptId);
-                    if (historyNode != null && historyNode.has("outputs") && historyNode.get("outputs").has("33")) {
-                        outputsNode = historyNode.get("outputs").get("33").get("images");
-                        break;
-                    }
-                } catch (JsonProcessingException e) {
-                    log.error("Error parsing output JSON: {}", e.getMessage());
+                String outputs = "outputs";
+                JsonNode rootNode = objectMapper.readTree(output);
+                JsonNode historyNode = rootNode.get(promptId);
+                if (historyNode != null && historyNode.has(outputs) && historyNode.get(outputs).has("33")) {
+                    outputsNode = historyNode.get(outputs).get("33").get("images");
+                    break;
                 }
 
                 retryCount++;
                 log.warn("Outputs not found, retrying in 3 seconds... ({}/{})", retryCount, maxRetries);
-                try {
-                    Thread.sleep(3000); // 3초 대기 후 재시도
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    log.error("Thread interrupted during retry delay");
-                    return null;
-                }
+                sleep(3 * 1000); // 3초 대기 후 재시도
             }
 
             if (outputsNode == null) {
@@ -113,7 +106,7 @@ public class ComfyUiRestClientImpl implements ComfyUiRestClient {
 
             for (JsonNode image : outputsNode) {
                 String filename = image.get("filename").asText();
-                future.complete(filename);
+                future.complete(comfyUiBaseUrl + "/view?filename=" + filename);
                 log.info("Filename: {}", filename);
             }
 
@@ -121,6 +114,15 @@ public class ComfyUiRestClientImpl implements ComfyUiRestClient {
         } catch (IOException e) {
             log.error("Error sending prompt: {}", e.getMessage());
             return null;
+        }
+    }
+
+    private void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Thread interrupted during retry delay");
         }
     }
 }
